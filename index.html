@@ -366,6 +366,7 @@ body.sidebar-collapsed .pager { left: 20px; }
   display: inline-block; min-width: 14ch; padding: 0 6px; border-bottom: 1px dashed rgba(255, 255, 255, .55); color: #fff; font-weight: 700; outline: none;
 }
 .cover__author:empty::before { content: attr(data-placeholder); color: #9db8ec; font-weight: 400; }
+.cover__author--fixed { min-width: 0; padding: 0; border-bottom: 0; }
 .cover__author:focus { background: rgba(255, 255, 255, .12); border-radius: 6px; }
 .cover__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .cover .btn { border-color: rgba(255, 255, 255, .28); background: rgba(255, 255, 255, .08); color: #fff; }
@@ -920,9 +921,9 @@ AIBook.config = {
   work: '№12 практикалық жұмыс',
   year: '2026',
 
-  /* Автордың аты-жөні. Бос қалдырсаңыз, мұқабада өз атыңызды тікелей жазуға болады
-     (ол браузерде сақталады). */
-  author: '',
+  /* Автордың аты-жөні. Толтырылса, мұқабада бекітіледі (өзгертілмейді).
+     Бос қалдырсаңыз, мұқабада атыңызды тікелей жазуға болады (ол браузерде сақталады). */
+  author: 'Каким Мөлдір',
 
   /* true — бейнелер бетте тікелей ойнатылады (YouTube iframe).
      false — тек сілтеме-карточка көрсетіледі (iframe рұқсат етілмейтін ортада). */
@@ -2276,7 +2277,8 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
   /* ---------- Мұқаба ---------- */
   V.cover = function () {
     const s = B.store.get();
-    const author = s.author || B.config.author || '';
+    const fixedAuthor = !!B.config.author;
+    const author = fixedAuthor ? B.config.author : (s.author || '');
     const hasLast = s.last && s.last !== 'cover' && B.pageIndex[s.last] != null;
     return '<section class="cover">' +
       '<div class="cover__text">' +
@@ -2285,7 +2287,9 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
       '<p class="cover__subtitle">Интерактивті электрондық оқулық</p>' +
       '<div class="cover__meta">' +
       '<div><b>Пән:</b> ' + esc(B.config.subject) + '</div>' +
-      '<div><b>Автор:</b> <span class="cover__author" id="author-edit" contenteditable="true" spellcheck="false" role="textbox" aria-label="Автордың аты-жөні" data-placeholder="Аты-жөніңізді осында жазыңыз">' + esc(author) + '</span></div>' +
+      '<div><b>Автор:</b> ' + (fixedAuthor
+        ? '<span class="cover__author cover__author--fixed" id="author-edit">' + esc(author) + '</span>'
+        : '<span class="cover__author" id="author-edit" contenteditable="true" spellcheck="false" role="textbox" aria-label="Автордың аты-жөні" data-placeholder="Аты-жөніңізді осында жазыңыз">' + esc(author) + '</span>') + '</div>' +
       '<div><b>Жылы:</b> ' + esc(B.config.year) + '</div></div>' +
       '<div class="cover__actions screen-only">' +
       '<a class="btn btn--primary" href="#preface">Оқуды бастау ' + icon('next') + '</a>' +
@@ -2999,7 +3003,7 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
   /* ---- Мұқаба: автор аты ---- */
   function mountCover(page) {
     const a = page.querySelector('#author-edit');
-    if (!a) return;
+    if (!a || !a.isContentEditable) return;
     a.addEventListener('input', () => B.store.update((s) => { s.author = a.textContent.trim(); }));
     a.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); a.blur(); } });
   }
