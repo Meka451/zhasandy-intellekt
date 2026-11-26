@@ -932,14 +932,14 @@ AIBook.config = {
      Тапсырма сол платформада жарияланған соң, нақты URL-ді осында қойыңыз.
      url бос болса — оқулықта «сілтеме әлі қосылмаған» деп көрсетіледі (жалған сілтеме жоқ). */
   externalTasks: [
-    { id: 'ww-match', platform: 'Wordwall', title: 'Термин мен анықтаманы сәйкестендір (Match up)', url: '' },
-    { id: 'ww-quiz', platform: 'Wordwall', title: 'ЖИ негіздері: викторина (Quiz)', url: '' },
-    { id: 'la-order', platform: 'LearningApps', title: 'Машиналық оқыту кезеңдерін ретке қой (Sort)', url: '' },
-    { id: 'la-group', platform: 'LearningApps', title: 'Бақыланатын / бақыланбайтын оқыту: топтау (Grouping)', url: '' }
+    { id: 'ww-match', platform: 'Wordwall', title: 'Термин мен анықтаманы сәйкестендір (Match up)', url: 'https://wordwall.net/resource/124815608' },
+    { id: 'ww-quiz', platform: 'Kahoot', title: 'ЖИ негіздері: викторина (Quiz)', url: 'https://kahoot.it/challenge/03647336?challenge-id=c05a8cdd-0ec8-4cc5-be70-8f10e90a9fe0_1795670044930', btn: 'Kahoot викторинасын бастау' },
+    { id: 'la-order', platform: 'LearningApps', title: 'Машиналық оқыту кезеңдерін ретке қой (Sort)', url: 'https://learningapps.org/display?v=pz6dw9m1k26', btn: 'Жаттығуды бастау' },
+    { id: 'la-group', platform: 'LearningApps', title: 'Бақыланатын / бақыланбайтын оқыту: топтау (Grouping)', url: 'https://learningapps.org/display?v=pj0o8gbz526', btn: 'Жаттығуды бастау' }
   ],
 
   /* Жариялағаннан кейінгі онлайн сілтеме (бос болса — көрсетілмейді) */
-  publicUrl: '',
+  publicUrl: 'https://meka451.github.io/zhasandy-intellekt/',
 
   /* ---- ӨЗ БЕЙНЕҢІЗДІ ҚОСУ ----
      Дайын бейнеңіздің сілтемесін url өрісіне қойыңыз (YouTube сілтемесі немесе .mp4 файлына жол).
@@ -2464,8 +2464,6 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
       '<h2>Бейнематериалдар</h2>' +
       V.videoList(uv) +
       (uv.some((v) => v && (v.url || '').trim()) ? '' : '<div class="videos">' + uv.map((v, i) => V.userVideo(v, i + 1)).join('') + '</div>') +
-      '<h3 class="vextra-h">Қосымша бейне (YouTube)</h3>' +
-      '<div class="videos">' + B.videos.map((v, i) => V.video(i)).join('') + '</div>' +
       '<h2>Пайдалы гиперсілтемелер</h2>' +
       '<ul class="links">' + B.links.map((l) => '<li><a href="' + l.url + '" target="_blank" rel="noopener">' + icon('external') + '<span><b>' + esc(l.title) + '</b><small>' + esc(l.desc) + '</small></span></a></li>').join('') + '</ul>' +
       '</div>';
@@ -2487,7 +2485,7 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
     const mrows = B.exMatch.map((p) => '<tr><th>' + esc(p.term) + '</th><td>' + esc(p.def) + '</td></tr>').join('');
     const orows = B.exOrder.map((s) => '<li><b>' + esc(s.text) + '.</b> ' + esc(s.note) + '</li>').join('');
     const ext = B.config.externalTasks.map((t) => '<div class="ext-card"><div><h3>' + esc(t.title) + '</h3><p>' + esc(t.platform) + (t.url ? '' : ' · сілтеме әлі қосылмаған') + '</p></div>' +
-      (t.url ? '<a class="btn btn--primary btn--sm" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + icon('external') + ' Ашу</a>' : '<span class="pill">Дайындалуда</span>') + '</div>').join('');
+      (t.url ? '<a class="btn btn--primary btn--sm" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + icon('external') + ' ' + esc(t.btn || 'Жаттығуды ашу') + '</a>' : '<span class="pill">Дайындалуда</span>') + '</div>').join('');
     return plainHero(['▶', 'Интерактивті бөлім'], 'Интерактивті жаттығулар', 'Drag & Drop жаттығулары және сыртқы платформалардағы тапсырмалар') +
       '<div class="page__inner prose">' +
       '<h2>1-жаттығу. Термин мен анықтаманы сәйкестендір</h2>' +
@@ -2497,7 +2495,7 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
       '<div class="screen-only" data-c="ex-order"></div>' +
       '<div class="print-only"><ol>' + orows + '</ol></div>' +
       '<h2>Wordwall, LearningApps, Kahoot! тапсырмалары</h2>' +
-      '<p class="small">Бұл тапсырмалардың мазмұны дайын (сәйкестендіру, викторина, сұрыптау, топтау). Платформада жарияланған соң сілтеме осы жерде «Ашу» батырмасына айналады. Әзірге жарияланған сыртқы тапсырма жоқ, сондықтан жалған сілтеме көрсетілмейді.</p>' +
+      '<p class="small">Төрт тапсырма да (сәйкестендіру, викторина, сұрыптау, топтау) платформаларда жарияланған. Әр батырма тапсырманы жаңа қойындыда ашады (компьютерде де, телефонда да).</p>' +
       '<div class="grid grid--2">' + ext + '</div>' +
       '</div>';
   };
@@ -2522,7 +2520,7 @@ print("Жаңа гүлдің болжамды түрі:", iris.target_names[mode
     Object.keys(B.refs).forEach((k) => {
       h += '<h2>' + esc(k) + '</h2><ol start="' + (n + 1) + '">' + B.refs[k].map((r) => { n++; return '<li>' + url(r) + '</li>'; }).join('') + '</ol>';
     });
-    h += '<div class="callout callout--note"><div class="callout__title">Ескерту</div><p>Мәтіндегі оқулық материалдары осы дереккөздер негізінде авторлық өңдеумен, өз сөзімен жазылған. Интернет-ресурстарды жариялау алдында қайта тексеріңіз.</p></div></div></div>';
+    h += '</div></div>';
     return h;
   };
 
